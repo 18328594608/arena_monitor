@@ -5,7 +5,7 @@
 #include "workflow/WFFacilities.h"
 
 static WFFacilities::WaitGroup wait_group(1);
-char previousData[100];
+std::string lastLine;
 
 void sig_handler(int signo)
 {
@@ -13,22 +13,28 @@ void sig_handler(int signo)
 }
 
 void Server::readTickLog() {
-    FILE *file = fopen("tick.log", "r");
-    if (file == NULL) {
-        perror("Error opening file");
+
+    std::string filePath = "/home/parallels/workspace/codespace/arena-server/matchengine/tick.log";
+    // 打开文件
+    std::ifstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
         return;
     }
 
-    char currentData[100];
-    fgets(currentData, sizeof(currentData), file);
-    fclose(file);
+    // 读取文件最后一行
+    std::string latestLine;
+    while (file >> std::ws && std::getline(file, latestLine));
 
-    if (strcmp(currentData, previousData) == 0) {
+    if (latestLine == lastLine) {
         b_run = false;
     } else {
         b_run = true;
+        lastLine = latestLine; // 更新上次数据
     }
-    strcpy(previousData, currentData);
+    // 关闭文件
+    file.close();
 }
 
 
