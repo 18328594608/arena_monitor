@@ -6,4 +6,4 @@ set(SRC
         )
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/protocol)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/)

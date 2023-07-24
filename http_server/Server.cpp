@@ -5,7 +5,7 @@
 #include "workflow/WFFacilities.h"
 
 static WFFacilities::WaitGroup wait_group(1);
-char previousData[10];
+char previousData[100];
 
 void sig_handler(int signo)
 {
@@ -19,7 +19,7 @@ void Server::readTickLog() {
         return;
     }
 
-    char currentData[10];
+    char currentData[100];
     fgets(currentData, sizeof(currentData), file);
     fclose(file);
 
@@ -33,7 +33,6 @@ void Server::readTickLog() {
 
 
 int Server::start() {
-    signal(SIGINT, sig_handler);
 
     auto *go_task = WFTaskFactory::create_go_task("go", [this](){
         while (true) {

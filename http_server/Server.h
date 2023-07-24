@@ -5,6 +5,7 @@
 #include "wfrest/HttpServer.h"
 
 using namespace wfrest;
+using namespace protocol;
 class Server {
 public:
     Server();
