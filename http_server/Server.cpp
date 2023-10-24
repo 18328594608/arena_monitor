@@ -3,9 +3,10 @@
 #include "Server.h"
 #include <cstdlib>
 #include "workflow/WFFacilities.h"
+#include "../config/config.h"
 
 static WFFacilities::WaitGroup wait_group(1);
-std::string lastLine;
+std::vector<std::string> lastLine(4, "");
 
 void sig_handler(int signo)
 {
@@ -13,28 +14,34 @@ void sig_handler(int signo)
 }
 
 void Server::readTickLog() {
-
-    std::string filePath = "/home/parallels/workspace/codespace/arena-server/matchengine/tick.log";
     // 打开文件
-    std::ifstream file(filePath);
+    error_msg = "";
 
-    if (!file.is_open()) {
-        std::cerr << "Error opening file: " << filePath << std::endl;
-        return;
+    for (int i = 0; i < Config::getInstance().tick_vec.size(); ++i) {
+        std::string filePath = Config::getInstance().tick_vec[i];
+        std::ifstream file(filePath);
+
+        if (!file.is_open()) {
+            std::cerr << "Error opening file: " << filePath << std::endl;
+            return;
+        }
+
+        // 读取文件最后一行
+        std::string latestLine;
+        while (file >> std::ws && std::getline(file, latestLine));
+
+        std::string line = lastLine[i];
+        if (latestLine == line) {
+            error_msg += filePath  + ";";
+            b_run = false;
+        } else {
+            b_run = true;
+            lastLine[i] = latestLine; // 更新上次数据
+        }
+        // 关闭文件
+        file.close();
     }
 
-    // 读取文件最后一行
-    std::string latestLine;
-    while (file >> std::ws && std::getline(file, latestLine));
-
-    if (latestLine == lastLine) {
-        b_run = false;
-    } else {
-        b_run = true;
-        lastLine = latestLine; // 更新上次数据
-    }
-    // 关闭文件
-    file.close();
 }
 
 
@@ -43,7 +50,7 @@ int Server::start() {
     auto *go_task = WFTaskFactory::create_go_task("go", [this](){
         while (true) {
             readTickLog();
-            usleep(100000);
+            usleep(1000000);
         }
     });
     go_task->start();
@@ -51,7 +58,7 @@ int Server::start() {
     HttpServer svr;
     svr.GET("/tick", [this](const HttpReq *req, HttpResp *resp)
     {
-        resp->String(std::to_string(b_run));
+        resp->String(std::to_string(b_run) + error_msg);
     });
 
     svr.POST("/exit", [](const HttpReq *req, HttpResp *resp)

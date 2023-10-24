@@ -15,6 +15,7 @@ public:
 
 private:
     bool b_run;
+    std::string error_msg;
 };
 
 

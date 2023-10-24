@@ -46,6 +46,7 @@ include_directories(${OPENSSL_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
 link_directories(${WFREST_LIB_DIR} ${WORKFLOW_LIB_DIR})
 
 add_subdirectory(http_server)
+add_subdirectory(config)
 add_executable(arena_monitor main.cpp)
 
 if (APPLE)
@@ -59,4 +60,5 @@ target_link_libraries(arena_monitor PRIVATE
         wfrest
         workflow
         http_server
+        config
         )
