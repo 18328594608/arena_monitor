@@ -1,5 +1,4 @@
 
-
 #include "Server.h"
 #include <cstdlib>
 #include "workflow/WFFacilities.h"
@@ -58,7 +57,7 @@ int Server::start() {
     HttpServer svr;
     svr.GET("/tick", [this](const HttpReq *req, HttpResp *resp)
     {
-        resp->String(std::to_string(b_run) + error_msg);
+        resp->String(std::to_string(b_run) + ":"+ error_msg);
     });
 
     svr.POST("/exit", [](const HttpReq *req, HttpResp *resp)
