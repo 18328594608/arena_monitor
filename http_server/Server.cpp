@@ -35,11 +35,14 @@ void Server::readTickLog() {
             b_run = false;
         } else {
             b_run = true;
-            error_msg = "";
             lastLine[i] = latestLine; // 更新上次数据
         }
         // 关闭文件
         file.close();
+    }
+    if (b_run)
+    {
+        error_msg = "";
     }
 
 }
