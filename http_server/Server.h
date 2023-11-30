@@ -14,6 +14,8 @@ public:
     int start();
 
 private:
+
+    std::mutex mutex_;
     bool b_run;
     std::string error_msg;
 };

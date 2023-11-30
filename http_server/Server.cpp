@@ -29,8 +29,9 @@ void Server::readTickLog() {
         std::string latestLine;
         while (file >> std::ws && std::getline(file, latestLine));
 
+        std::lock_guard<std::mutex> lock(mutex_);
         std::string line = lastLine[i];
-        if (latestLine == line) {
+        if (std::strcmp(latestLine.c_str(), line.c_str()) != 0) {
             error_msg += filePath  + ";";
             b_run = false;
         } else {
