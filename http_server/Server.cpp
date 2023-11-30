@@ -31,7 +31,7 @@ void Server::readTickLog() {
 
         std::lock_guard<std::mutex> lock(mutex_);
         std::string line = lastLine[i];
-        if (std::strcmp(latestLine.c_str(), line.c_str()) != 0) {
+        if (latestLine == line) {
             error_msg += filePath  + ";";
             b_run = false;
         } else {
