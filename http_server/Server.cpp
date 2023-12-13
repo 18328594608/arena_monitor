@@ -59,13 +59,13 @@ void Server::readTickLog() {
 
 int Server::start() {
 
-    auto *go_task = WFTaskFactory::create_go_task("go", [this](){
-        while (true) {
-            readTickLog();
-            usleep(2000000);
-        }
-    });
-    go_task->start();
+   auto  fuction = [this](){
+       while (true) {
+           readTickLog();
+           usleep(100000);
+       }
+   };
+    std::thread myThread(fuction);
 
     HttpServer svr;
     svr.GET("/tick", [this](const HttpReq *req, HttpResp *resp)
