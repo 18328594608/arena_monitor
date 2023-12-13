@@ -41,7 +41,11 @@ void Server::readTickLog() {
 
         if(!b_run)
         {
-            std::cerr << "latestLine: " << latestLine << "line:" << line<<std::endl;
+            std::cerr <<"[error]: "<< "latestLine: " << latestLine << "line:" << line<<std::endl;
+        }
+        else
+        {
+            std::cerr <<"[success]: "<< "latestLine: " << latestLine << "line:" << line<<std::endl;
         }
         // 关闭文件
         file.close();
@@ -58,7 +62,7 @@ int Server::start() {
     auto *go_task = WFTaskFactory::create_go_task("go", [this](){
         while (true) {
             readTickLog();
-            usleep(100000);
+            usleep(10000);
         }
     });
     go_task->start();
