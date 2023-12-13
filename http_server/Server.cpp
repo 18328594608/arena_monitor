@@ -43,10 +43,6 @@ void Server::readTickLog() {
         {
             std::cerr <<"[error]: "<< "latestLine: " << latestLine << "line:" << line<<std::endl;
         }
-        else
-        {
-            std::cerr <<"[success]: "<< "latestLine: " << latestLine << "line:" << line<<std::endl;
-        }
         // 关闭文件
         file.close();
     }
