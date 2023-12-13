@@ -61,5 +61,4 @@ target_link_libraries(arena_monitor PRIVATE
         workflow
         http_server
         config
-        pthread
         )
