@@ -58,7 +58,7 @@ int Server::start() {
     auto *go_task = WFTaskFactory::create_go_task("go", [this](){
         while (true) {
             readTickLog();
-            usleep(2000000);
+            usleep(5000000);
         }
     });
     go_task->start();
